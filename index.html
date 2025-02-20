@@ -746,9 +746,323 @@
                 transform: translateY(0);
             }
         }
+
+/* Advanced animations */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+@keyframes shine {
+    0% { background-position: -100% 50%; }
+    100% { background-position: 200% 50%; }
+}
+
+@keyframes ripple {
+    0% {
+        transform: scale(0);
+        opacity: 0.5;
+    }
+    100% {
+        transform: scale(2);
+        opacity: 0;
+    }
+}
+
+@keyframes slideUp {
+    0% {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
+/* Enhanced click button */
+.click-button {
+    position: relative;
+    overflow: visible !important;
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    animation: float 3s ease-in-out infinite;
+    background: linear-gradient(135deg, var(--primary-light), var(--primary), var(--primary-light)) !important;
+    background-size: 200% 100% !important;
+}
+
+.click-button:hover {
+    animation: float 3s ease-in-out infinite, shine 3s linear infinite !important;
+}
+
+.click-button:active {
+    animation: none !important;
+}
+
+.click-button::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    background: inherit;
+    border-radius: inherit;
+    z-index: -1;
+    opacity: 0.5;
+    filter: blur(10px);
+}
+
+/* Ripple effect */
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.8);
+    transform: scale(0);
+    animation: ripple 0.6s linear;
+    pointer-events: none;
+}
+
+/* Enhanced shop items */
+.shop-item {
+    transform: translateY(0);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    animation: slideUp 0.5s ease-out;
+    animation-fill-mode: both;
+}
+
+.shop-item:hover {
+    transform: translateY(-5px) scale(1.02) !important;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Enhanced achievements */
+.achievement {
+    animation: slideUp 0.5s ease-out, bounce 2s ease-in-out !important;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .stats {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .nav-menu {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .click-button {
+        width: 150px;
+        height: 150px;
+    }
+
+    .shop-section {
+        margin-top: 2rem;
+    }
+
+    .modal {
+        width: 95%;
+        margin: 1rem;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    .language-options {
+        position: fixed;
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: 0;
+        border-radius: 1rem 1rem 0 0;
+        padding: 1rem;
+        background: var(--background);
+    }
+
+    .save-slots {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Tablet optimizations */
+@media (min-width: 769px) and (max-width: 1024px) {
+    main {
+        grid-template-columns: 1fr;
+        max-width: 800px;
+    }
+
+    .shop-section {
+        position: static;
+        margin-top: 2rem;
+    }
+
+    .shop-items {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+}
+
+/* Touch device optimizations */
+@media (hover: none) {
+    .click-button:hover {
+        transform: none;
+        animation: float 3s ease-in-out infinite !important;
+    }
+
+    .shop-item:hover {
+        transform: none;
+        box-shadow: none;
+    }
+
+    .nav-item {
+        padding: 0.75rem 1.5rem;
+    }
+}
+
+/* Loading animation */
+.loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--background);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid var(--card);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    100% { transform: rotate(360deg); }
+}
+
+/* Enhanced floating numbers */
+.floating-number {
+    animation: floatUpAndFade 1s cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
+    font-size: 1.5rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes floatUpAndFade {
+    0% {
+        transform: translate(-50%, 0) scale(0.5);
+        opacity: 0;
+    }
+    20% {
+        transform: translate(-50%, -20px) scale(1.2);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50px) scale(1);
+        opacity: 0;
+    }
+}
+
+/* Particle system */
+.particle-container {
+    position: absolute;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+.particle {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: var(--primary);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+/* Enhanced modal animations */
+.modal-overlay {
+    backdrop-filter: blur(5px);
+    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal-overlay.active .modal {
+    transform: scale(1) translateY(0);
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Touch-friendly buttons */
+button {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Enhanced shop item transitions */
+.shop-items {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.shop-item {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.shop-item.visible {
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Stagger animation delays */
+.shop-item:nth-child(1) { animation-delay: 0.1s; }
+.shop-item:nth-child(2) { animation-delay: 0.2s; }
+.shop-item:nth-child(3) { animation-delay: 0.3s; }
+.shop-item:nth-child(4) { animation-delay: 0.4s; }
+.shop-item:nth-child(5) { animation-delay: 0.5s; }
+.shop-item:nth-child(6) { animation-delay: 0.6s; }
     </style>
 </head>
 <body>
+    <!-- Add loading screen -->
+    <div class="loading" id="loadingScreen">
+        <div class="loading-spinner"></div>
+    </div>
+
     <header>
         <div class="header-content">
             <div class="stats">
@@ -909,7 +1223,6 @@
 
     <script>
         // Game state
-        // Initial game state
         let gameState = {
             clicks: 0,
             perClick: 1,
@@ -1110,7 +1423,8 @@
             },
             upgrades: {}
         };
-        gameState = {
+
+        let gameState = {
             ...previousGameState,
             language: 'en',
             currentUser: null,
@@ -1629,8 +1943,153 @@
             }, 100);
         }
 
-        // Initialize game when page loads
-        window.addEventListener('load', initGame);
-    </script>
+        // Enhanced click animation
+        function createRipple(event) {
+            const button = event.currentTarget;
+            const ripple = document.createElement('div');
+            const rect = button.getBoundingClientRect();
+            
+            const size = Math.max(rect.width, rect.height);
+            const x = event.clientX - rect.left - size / 2;
+            const y = event.clientY - rect.top - size / 2;
+            
+            ripple.style.width = ripple.style.height = `${size}px`;
+            ripple.style.left = `${x}px`;
+            ripple.style.top = `${y}px`;
+            ripple.className = 'ripple';
+            
+            button.appendChild(ripple);
+            ripple.addEventListener('animationend', () => ripple.remove());
+        }
+
+        // Enhanced particle system
+        function createParticles(x, y) {
+            const container = document.createElement('div');
+            container.className = 'particle-container';
+            container.style.left = x + 'px';
+            container.style.top = y + 'px';
+            
+            for (let i = 0; i < 12; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                const angle = (i / 12) * Math.PI * 2;
+                const velocity = 2 + Math.random() * 2;
+                const size = 4 + Math.random() * 4;
+                
+                particle.style.width = particle.style.height = size + 'px';
+                
+                const animation = particle.animate([
+                    {
+                        transform: 'translate(0, 0) scale(1)',
+                        opacity: 1
+                    },
+                    {
+                        transform: `translate(${Math.cos(angle) * 50 * velocity}px, ${Math.sin(angle) * 50 * velocity}px) scale(0)`,
+                        opacity: 0
+                    }
+                ], {
+                    duration: 1000,
+                    easing: 'cubic-bezier(0.4, 0, 0.2, 1)'
+                });
+                
+                container.appendChild(particle);
+                animation.onfinish = () => container.remove();
+            }
+            
+            document.body.appendChild(container);
+        }
+
+        // Intersection Observer for shop items
+        const observeShopItems = () => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.shop-item').forEach(item => {
+                observer.observe(item);
+            });
+        };
+
+        // Enhanced click handler
+        clickButton.addEventListener('click', (e) => {
+            createRipple(e);
+            createParticles(e.clientX, e.clientY);
+            incrementClicks(gameState.perClick);
+            animateClick();
+            checkAchievements();
+        });
+
+        // Loading screen
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loadingScreen').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('loadingScreen').style.display = 'none';
+                }, 300);
+            }, 500);
+            
+            initGame();
+            observeShopItems();
+        });
+
+        // Touch event handling
+        document.addEventListener('touchstart', () => {}, {passive: true});
+
+        // Enhanced achievement display
+        function showAchievement(achievement) {
+            if (!gameState.settings.notifications) return;
+
+            const achievementElement = document.createElement('div');
+            achievementElement.className = 'achievement';
+            achievementElement.innerHTML = `
+                <div class="achievement-icon">🏆</div>
+                <div class="achievement-content">
+                    <div class="achievement-title">${achievement.title}</div>
+                    <div class="achievement-description">${achievement.description}</div>
+                </div>
+            `;
+
+            achievementContainer.appendChild(achievementElement);
+            
+            // Enhanced removal animation
+            setTimeout(() => {
+                achievementElement.style.animation = 'slideOut 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards';
+                setTimeout(() => achievementElement.remove(), 300);
+            }, 3000);
+        }
+
+        // Enhanced shop rendering with stagger animation
+        function renderShop() {
+            shopItemsContainer.innerHTML = '';
+            shopItems.forEach((item, index) => {
+                const owned = gameState.upgrades[item.id] || 0;
+                const price = Math.floor(item.basePrice * Math.pow(1.15, owned));
+                const canAfford = gameState.clicks >= price;
+
+                const itemElement = document.createElement('div');
+                itemElement.className = `shop-item ${canAfford ? '' : 'disabled'}`;
+                itemElement.style.animationDelay = `${index * 0.1}s`;
+                itemElement.innerHTML = `
+                    <div class="shop-item-header">
+                        <span class="shop-item-name" data-lang="${item.id}">${translations[gameState.language][item.id] || item.name}</span>
+                        <span class="shop-item-price">${formatNumber(price)}</span>
+                    </div>
+                    <div class="shop-item-description">${item.description}</div>
+                    <div class="shop-item-stats">
+                        <span>Owned: ${owned}</span>
+                        <span>+${item.perSecond}/s</span>
+                    </div>
+                `;
+
+                itemElement.addEventListener('click', () => purchaseItem(item));
+                shopItemsContainer.appendChild(itemElement);
+            });
+        }
+        </script>
 </body>
 </html>
