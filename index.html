@@ -1061,6 +1061,7 @@ button {
     <!-- Add loading screen -->
     <div class="loading" id="loadingScreen">
         <div class="loading-spinner"></div>
+        <div class="loading-text" data-lang="loading">Loading...</div>
     </div>
 
     <header>
@@ -1092,9 +1093,6 @@ button {
                         <div class="language-option" onclick="changeLanguage('uk')">Українська</div>
                     </div>
                 </div>
-                <div class="account-section" id="accountSection">
-                    <!-- Will be populated by JavaScript -->
-                </div>
             </div>
         </div>
     </header>
@@ -1118,7 +1116,7 @@ button {
     <div class="modal-overlay" id="achievementsModal">
         <div class="modal">
             <div class="modal-header">
-                <h2 class="modal-title">Achievements</h2>
+                <h2 class="modal-title" data-lang="achievements">Achievements</h2>
                 <button class="modal-close" onclick="closeModal('achievementsModal')">&times;</button>
             </div>
             <div class="modal-content">
@@ -1130,191 +1128,149 @@ button {
     <div class="modal-overlay" id="settingsModal">
         <div class="modal">
             <div class="modal-header">
-                <h2 class="modal-title">Settings</h2>
+                <h2 class="modal-title" data-lang="settings">Settings</h2>
                 <button class="modal-close" onclick="closeModal('settingsModal')">&times;</button>
             </div>
             <div class="modal-content">
                 <div class="settings-grid">
                     <div class="setting-item">
-                        <span class="setting-label">Sound Effects</span>
+                        <span class="setting-label" data-lang="sound">Sound Effects</span>
                         <div class="toggle" id="soundToggle" onclick="toggleSetting('sound')">
                             <div class="toggle-thumb"></div>
                         </div>
                     </div>
                     <div class="setting-item">
-                        <span class="setting-label">Particles</span>
+                        <span class="setting-label" data-lang="particles">Particles</span>
                         <div class="toggle" id="particlesToggle" onclick="toggleSetting('particles')">
                             <div class="toggle-thumb"></div>
                         </div>
                     </div>
                     <div class="setting-item">
-                        <span class="setting-label">Notifications</span>
+                        <span class="setting-label" data-lang="notifications">Notifications</span>
                         <div class="toggle" id="notificationsToggle" onclick="toggleSetting('notifications')">
                             <div class="toggle-thumb"></div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div style="display: flex; justify-content: space-between; gap: 1rem;">
-                <button class="button secondary" onclick="resetGame()">Reset Game</button>
-                <button class="button" onclick="saveGame()">Save Game</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- New Auth Modal -->
-    <div class="modal-overlay" id="authModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h2 class="modal-title" data-lang="auth">Authentication</h2>
-                <button class="modal-close" onclick="closeModal('authModal')">&times;</button>
-            </div>
-            <div class="modal-content">
-                <div class="auth-tabs">
-                    <div class="auth-tab active" onclick="switchAuthTab('login')" data-lang="login">Login</div>
-                    <div class="auth-tab" onclick="switchAuthTab('register')" data-lang="register">Register</div>
-                </div>
-                <div id="loginForm" class="auth-form">
-                    <div class="form-group">
-                        <label class="form-label" data-lang="username">Username</label>
-                        <input type="text" class="form-input" id="loginUsername">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" data-lang="password">Password</label>
-                        <input type="password" class="form-input" id="loginPassword">
-                    </div>
-                    <button class="button" onclick="login()" data-lang="loginButton">Login</button>
-                    <div class="error-message" id="loginError"></div>
-                </div>
-                <div id="registerForm" class="auth-form" style="display: none;">
-                    <div class="form-group">
-                        <label class="form-label" data-lang="username">Username</label>
-                        <input type="text" class="form-input" id="registerUsername">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" data-lang="password">Password</label>
-                        <input type="password" class="form-input" id="registerPassword">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" data-lang="confirmPassword">Confirm Password</label>
-                        <input type="password" class="form-input" id="registerPasswordConfirm">
-                    </div>
-                    <button class="button" onclick="register()" data-lang="registerButton">Register</button>
-                    <div class="error-message" id="registerError"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Save Slots Modal -->
-    <div class="modal-overlay" id="saveSlotsModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h2 class="modal-title" data-lang="saveSlots">Save Slots</h2>
-                <button class="modal-close" onclick="closeModal('saveSlotsModal')">&times;</button>
-            </div>
-            <div class="modal-content">
-                <div class="save-slots" id="saveSlots">
-                    <!-- Will be populated by JavaScript -->
-                </div>
+            <div style="display: flex; justify-content: space-between; gap: 1rem; margin-top: 1rem;">
+                <button class="button secondary" onclick="resetGame()" data-lang="resetGame">Reset Game</button>
+                <button class="button" onclick="saveGame()" data-lang="saveGame">Save Game</button>
             </div>
         </div>
     </div>
 
     <script>
-        // Game state
-        let gameState = {
-            clicks: 0,
-            perClick: 1,
-            perSecond: 0,
-            lastSave: Date.now(),
-            achievements: {},
-            settings: {
-                sound: true,
-                particles: true,
-                notifications: true
-            },
-            upgrades: {}
-        };
+// Remove all account-related code and simplify the game state
+let gameState = {
+    clicks: 0,
+    perClick: 1,
+    perSecond: 0,
+    lastSave: Date.now(),
+    achievements: {},
+    settings: {
+        sound: true,
+        particles: true,
+        notifications: true
+    },
+    upgrades: {},
+    language: 'en'
+};
 
-        // Language translations
-        const translations = {
-            en: {
-                clicks: "Clicks:",
-                perClick: "Per Click:",
-                perSecond: "Per Second:",
-                achievements: "Achievements",
-                settings: "Settings",
-                auth: "Authentication",
-                login: "Login",
-                register: "Register",
-                username: "Username",
-                password: "Password",
-                confirmPassword: "Confirm Password",
-                loginButton: "Login",
-                registerButton: "Register",
-                saveSlots: "Save Slots",
-                logout: "Logout",
-                profile: "Profile",
-                saveGame: "Save Game",
-                resetGame: "Reset Game",
-                newSave: "New Save",
-                loadSave: "Load Save",
-                deleteSave: "Delete Save",
-                // Shop items
-                cursor: "Cursor",
-                farmer: "Farmer",
-                mine: "Click Mine",
-                factory: "Click Factory",
-                laboratory: "Click Lab",
-                portal: "Click Portal",
-                // Achievements
-                firstClick: "First Click",
-                hundred: "Centurion",
-                thousand: "Millionaire",
-                million: "Billionaire",
-                firstUpgrade: "Upgrader"
-            },
-            uk: {
-                clicks: "Кліки:",
-                perClick: "За Клік:",
-                perSecond: "За Секунду:",
-                achievements: "Досягнення",
-                settings: "Налаштування",
-                auth: "Автентифікація",
-                login: "Вхід",
-                register: "Реєстрація",
-                username: "Ім'я користувача",
-                password: "Пароль",
-                confirmPassword: "Підтвердіть пароль",
-                loginButton: "Увійти",
-                registerButton: "Зареєструватися",
-                saveSlots: "Слоти збереження",
-                logout: "Вийти",
-                profile: "Профіль",
-                saveGame: "Зберегти гру",
-                resetGame: "Скинути гру",
-                newSave: "Нове збереження",
-                loadSave: "Завантажити",
-                deleteSave: "Видалити",
-                // Shop items
-                cursor: "Курсор",
-                farmer: "Фермер",
-                mine: "Клік-шахта",
-                factory: "Клік-фабрика",
-                laboratory: "Клік-лабораторія",
-                portal: "Клік-портал",
-                // Achievements
-                firstClick: "Перший клік",
-                hundred: "Сотник",
-                thousand: "Мільйонер",
-                million: "Мільярдер",
-                firstUpgrade: "Покупець"
-            }
-        };
+// Simplified translations
+const translations = {
+    en: {
+        clicks: "Clicks:",
+        perClick: "Per Click:",
+        perSecond: "Per Second:",
+        achievements: "Achievements",
+        settings: "Settings",
+        sound: "Sound Effects",
+        particles: "Particles",
+        notifications: "Notifications",
+        saveGame: "Save Game",
+        resetGame: "Reset Game",
+        loading: "Loading...",
+        // Shop items
+        cursor: "Cursor",
+        farmer: "Farmer",
+        mine: "Click Mine",
+        factory: "Click Factory",
+        laboratory: "Click Lab",
+        portal: "Click Portal",
+        // Achievements
+        firstClick: "First Click",
+        hundred: "Centurion",
+        thousand: "Millionaire",
+        million: "Billionaire",
+        firstUpgrade: "Upgrader"
+    },
+    uk: {
+        clicks: "Кліки:",
+        perClick: "За Клік:",
+        perSecond: "За Секунду:",
+        achievements: "Досягнення",
+        settings: "Налаштування",
+        sound: "Звукові ефекти",
+        particles: "Частинки",
+        notifications: "Сповіщення",
+        saveGame: "Зберегти гру",
+        resetGame: "Скинути гру",
+        loading: "Завантаження...",
+        // Shop items
+        cursor: "Курсор",
+        farmer: "Фермер",
+        mine: "Клік-шахта",
+        factory: "Клік-фабрика",
+        laboratory: "Клік-лабораторія",
+        portal: "Клік-портал",
+        // Achievements
+        firstClick: "Перший клік",
+        hundred: "Сотник",
+        thousand: "Мільйонер",
+        million: "Мільярдер",
+        firstUpgrade: "Покупець"
+    }
+};
 
-        // Shop items configuration
-        const shopItems = [
+// Optimized loading
+window.addEventListener('load', () => {
+    // Ensure minimum loading time for smooth transition
+    const minLoadTime = 500;
+    const startTime = Date.now();
+    
+    Promise.all([
+        // Add any necessary asset loading here
+        new Promise(resolve => setTimeout(resolve, minLoadTime))
+    ]).then(() => {
+        const loadingScreen = document.getElementById('loadingScreen');
+        loadingScreen.style.opacity = '0';
+        setTimeout(() => {
+            loadingScreen.style.display = 'none';
+            initGame();
+        }, 300);
+    });
+});
+
+// Simplified save/load
+function saveGame() {
+    localStorage.setItem('clickerGameState', JSON.stringify(gameState));
+    showAchievement({
+        title: translations[gameState.language].saveGame,
+        description: translations[gameState.language].gameSaved
+    });
+}
+
+function loadGame() {
+    const savedState = localStorage.getItem('clickerGameState');
+    if (savedState) {
+        gameState = { ...gameState, ...JSON.parse(savedState) };
+    }
+}
+
+// Rest of your existing game code...
+ // Shop items configuration
+ const shopItems = [
             {
                 id: 'cursor',
                 name: 'Cursor',
@@ -1409,28 +1365,6 @@ button {
         const achievementContainer = document.getElementById('achievementContainer');
         const achievementsList = document.getElementById('achievementsList');
 
-        // Extended game state
-        let previousGameState = {
-            clicks: 0,
-            perClick: 1,
-            perSecond: 0,
-            lastSave: Date.now(),
-            achievements: {},
-            settings: {
-                sound: true,
-                particles: true,
-                notifications: true
-            },
-            upgrades: {}
-        };
-
-        let gameState = {
-            ...previousGameState,
-            language: 'en',
-            currentUser: null,
-            saveSlots: []
-        };
-
         // Language functions
         function changeLanguage(lang) {
             gameState.language = lang;
@@ -1454,246 +1388,6 @@ button {
         function toggleLanguageOptions() {
             const options = document.getElementById('languageOptions');
             options.classList.toggle('active');
-        }
-
-        // Account functions
-        function updateAccountSection() {
-            const accountSection = document.getElementById('accountSection');
-            if (gameState.currentUser) {
-                accountSection.innerHTML = `
-                    <div class="profile-button" onclick="openSaveSlots()">
-                        <div class="profile-avatar">${gameState.currentUser.username[0].toUpperCase()}</div>
-                    </div>
-                    <button class="button secondary" onclick="logout()" data-lang="logout">Logout</button>
-                `;
-            } else {
-                accountSection.innerHTML = `
-                    <button class="button" onclick="openModal('authModal')" data-lang="login">Login</button>
-                `;
-            }
-            updateTranslations();
-        }
-
-        function switchAuthTab(tab) {
-            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-            document.querySelector(`.auth-tab[onclick*="${tab}"]`).classList.add('active');
-            document.getElementById('loginForm').style.display = tab === 'login' ? 'flex' : 'none';
-            document.getElementById('registerForm').style.display = tab === 'register' ? 'flex' : 'none';
-        }
-
-        function login() {
-            const username = document.getElementById('loginUsername').value;
-            const password = document.getElementById('loginPassword').value;
-            
-            // Simple login logic (in real app, you'd want to use proper authentication)
-            const users = JSON.parse(localStorage.getItem('users') || '{}');
-            if (users[username] && users[username].password === password) {
-                gameState.currentUser = { username };
-                loadUserSaves();
-                closeModal('authModal');
-                updateAccountSection();
-                showAchievement({
-                    title: translations[gameState.language].login,
-                    description: `${translations[gameState.language].welcome}, ${username}!`
-                });
-            } else {
-                document.getElementById('loginError').textContent = 'Invalid username or password';
-            }
-        }
-
-        function register() {
-            const username = document.getElementById('registerUsername').value;
-            const password = document.getElementById('registerPassword').value;
-            const confirmPassword = document.getElementById('registerPasswordConfirm').value;
-
-            if (password !== confirmPassword) {
-                document.getElementById('registerError').textContent = 'Passwords do not match';
-                return;
-            }
-
-            const users = JSON.parse(localStorage.getItem('users') || '{}');
-            if (users[username]) {
-                document.getElementById('registerError').textContent = 'Username already exists';
-                return;
-            }
-
-            users[username] = { password };
-            localStorage.setItem('users', JSON.stringify(users));
-            
-            // Auto-login after registration
-            gameState.currentUser = { username };
-            closeModal('authModal');
-            updateAccountSection();
-            showAchievement({
-                title: translations[gameState.language].register,
-                description: `${translations[gameState.language].welcome}, ${username}!`
-            });
-        }
-
-        function logout() {
-            gameState.currentUser = null;
-            updateAccountSection();
-            location.reload(); // Reload to reset game state
-        }
-
-        // Save slot functions
-        function loadUserSaves() {
-            if (!gameState.currentUser) return;
-            
-            const saves = JSON.parse(localStorage.getItem(`saves_${gameState.currentUser.username}`) || '[]');
-            gameState.saveSlots = saves;
-        }
-
-        function renderSaveSlots() {
-            const container = document.getElementById('saveSlots');
-            container.innerHTML = '';
-
-            // Add "New Save" slot
-            const newSaveSlot = document.createElement('div');
-            newSaveSlot.className = 'save-slot';
-            newSaveSlot.innerHTML = `
-                <div class="save-slot-header">
-                    <span class="save-slot-name" data-lang="newSave">New Save</span>
-                </div>
-            `;
-            newSaveSlot.onclick = createNewSave;
-            container.appendChild(newSaveSlot);
-
-            // Render existing saves
-            gameState.saveSlots.forEach((save, index) => {
-                const slot = document.createElement('div');
-                slot.className = 'save-slot';
-                slot.innerHTML = `
-                    <div class="save-slot-header">
-                        <span class="save-slot-name">Save ${index + 1}</span>
-                        <span class="save-slot-date">${new Date(save.lastSave).toLocaleDateString()}</span>
-                    </div>
-                    <div class="save-slot-stats">
-                        ${translations[gameState.language].clicks}: ${formatNumber(save.clicks)}<br>
-                        ${translations[gameState.language].perSecond}: ${formatNumber(save.perSecond)}
-                    </div>
-                    <div class="save-slot-actions">
-                        <button class="button" onclick="loadSave(${index})" data-lang="loadSave">Load</button>
-                        <button class="button secondary" onclick="deleteSave(${index})" data-lang="deleteSave">Delete</button>
-                    </div>
-                `;
-                container.appendChild(slot);
-            });
-
-            updateTranslations();
-        }
-
-        function createNewSave() {
-            if (!gameState.currentUser) return;
-
-            const newSave = {
-                ...getDefaultGameState(),
-                lastSave: Date.now()
-            };
-
-            gameState.saveSlots.push(newSave);
-            saveSaveSlots();
-            renderSaveSlots();
-        }
-
-        function loadSave(index) {
-            const save = gameState.saveSlots[index];
-            if (!save) return;
-
-            Object.assign(gameState, save);
-            closeModal('saveSlotsModal');
-            updateStats();
-            renderShop();
-            showAchievement({
-                title: translations[gameState.language].loadSave,
-                description: `Save ${index + 1} loaded`
-            });
-        }
-
-        function deleteSave(index) {
-            if (!confirm(translations[gameState.language].confirmDelete)) return;
-
-            gameState.saveSlots.splice(index, 1);
-            saveSaveSlots();
-            renderSaveSlots();
-        }
-
-        function saveSaveSlots() {
-            if (!gameState.currentUser) return;
-            localStorage.setItem(`saves_${gameState.currentUser.username}`, JSON.stringify(gameState.saveSlots));
-        }
-
-        // Initialize game
-        function initGame() {
-            loadGame();
-            updateTranslations();
-            updateAccountSection();
-            renderShop();
-            renderAchievements();
-            updateStats();
-            initSettings();
-            startAutoSave();
-            startAutoClicker();
-
-            // Close language options when clicking outside
-            document.addEventListener('click', (e) => {
-                if (!e.target.closest('.language-switcher')) {
-                    document.getElementById('languageOptions').classList.remove('active');
-                }
-            });
-        }
-
-        function getDefaultGameState() {
-            return {
-                clicks: 0,
-                perClick: 1,
-                perSecond: 0,
-                lastSave: Date.now(),
-                achievements: {},
-                settings: {
-                    sound: true,
-                    particles: true,
-                    notifications: true
-                },
-                upgrades: {},
-                language: 'en',
-                currentUser: null,
-                saveSlots: []
-            };
-        }
-
-        // Modified save/load functions
-        function saveGame() {
-            if (gameState.currentUser) {
-                const currentSaveIndex = gameState.saveSlots.findIndex(save => save.lastSave === gameState.lastSave);
-                if (currentSaveIndex !== -1) {
-                    gameState.saveSlots[currentSaveIndex] = {
-                        ...gameState,
-                        lastSave: Date.now()
-                    };
-                } else {
-                    gameState.saveSlots.push({
-                        ...gameState,
-                        lastSave: Date.now()
-                    });
-                }
-                saveSaveSlots();
-            }
-            localStorage.setItem('clickerGameState', JSON.stringify(gameState));
-            showAchievement({
-                title: translations[gameState.language].saveGame,
-                description: translations[gameState.language].gameSaved
-            });
-        }
-
-        function loadGame() {
-            const savedState = localStorage.getItem('clickerGameState');
-            if (savedState) {
-                gameState = { ...getDefaultGameState(), ...JSON.parse(savedState) };
-            }
-            if (gameState.currentUser) {
-                loadUserSaves();
-            }
         }
 
         // Click handling
@@ -1894,9 +1588,6 @@ button {
         function openModal(modalId) {
             const modal = document.getElementById(modalId);
             modal.classList.add('active');
-            if (modalId === 'saveSlotsModal') {
-                renderSaveSlots();
-            }
         }
 
         function closeModal(modalId) {
@@ -1910,10 +1601,6 @@ button {
 
         function openSettings() {
             openModal('settingsModal');
-        }
-
-        function openSaveSlots() {
-            openModal('saveSlotsModal');
         }
 
         // Utility functions
@@ -2024,22 +1711,6 @@ button {
             checkAchievements();
         });
 
-        // Loading screen
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.getElementById('loadingScreen').style.opacity = '0';
-                setTimeout(() => {
-                    document.getElementById('loadingScreen').style.display = 'none';
-                }, 300);
-            }, 500);
-            
-            initGame();
-            observeShopItems();
-        });
-
-        // Touch event handling
-        document.addEventListener('touchstart', () => {}, {passive: true});
-
         // Enhanced achievement display
         function showAchievement(achievement) {
             if (!gameState.settings.notifications) return;
@@ -2090,6 +1761,38 @@ button {
                 shopItemsContainer.appendChild(itemElement);
             });
         }
-        </script>
+
+        // Loading screen
+        function initGame() {
+            loadGame();
+            updateTranslations();
+            renderShop();
+            renderAchievements();
+            updateStats();
+            initSettings();
+            startAutoSave();
+            startAutoClicker();
+            observeShopItems();
+        }
+
+        function updateStats() {
+            clickCounter.textContent = formatNumber(gameState.clicks);
+            perClickValue.textContent = formatNumber(gameState.perClick);
+            perSecondValue.textContent = formatNumber(gameState.perSecond);
+        }
+
+        function initSettings() {
+            Object.entries(gameState.settings).forEach(([setting, value]) => {
+                const toggle = document.getElementById(`${setting}Toggle`);
+                if (toggle) {
+                    toggle.classList.toggle('active', value);
+                }
+            });
+        }
+
+        startAutoSave();
+        startAutoClicker();
+        observeShopItems();
+    </script>
 </body>
 </html>
